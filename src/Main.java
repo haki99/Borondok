@@ -4,18 +4,8 @@ public class Main {
     public static void main(String[] args) {
 
         Rakter rakter = new Rakter();
+        rakter.setupRakter();
 
-        for(int i = 0; i < 7; i++){
-            rakter.addFal(i,0);
-            rakter.addFal(i,6);
-        }
-
-        for(int j = 0; j < 7; j++){
-            rakter.addFal(0, j);
-            rakter.addFal(6, j);
-        }
-
-        rakter.addFal(3, 3);
         rakter.addMunkas(1,1);
 
         Scanner myObj = new Scanner(System.in);
@@ -29,10 +19,40 @@ public class Main {
             switch(input){
                 case("addpuha"):{
                     rakter.addPuhaborond();
+                    rakter.szomszedok_frissites();
                     break;
                 }
                 case("addkemeny"):{
                     rakter.addKemenyborond();
+                    rakter.szomszedok_frissites();
+                    break;
+                }
+                case("movedown"):{
+                    if(!rakter.MoveDown(0)){
+                        System.out.println("Nem tud arra mozogni!");
+                        rakter.szomszedok_frissites();
+                    }
+                    break;
+                }
+                case("moveright"):{
+                    if(!rakter.MoveRight(0)){
+                        System.out.println("Nem tud arra mozogni!");
+                        rakter.szomszedok_frissites();
+                    }
+                    break;
+                }
+                case("moveleft"):{
+                    if(!rakter.MoveLeft(0)){
+                        System.out.println("Nem tud arra mozogni!");
+                        rakter.szomszedok_frissites();
+                    }
+                    break;
+                }
+                case("moveup"):{
+                    if(!rakter.MoveUp(0)){
+                        System.out.println("Nem tud arra mozogni!");
+                        rakter.szomszedok_frissites();
+                    }
                     break;
                 }
             }

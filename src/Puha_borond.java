@@ -1,6 +1,11 @@
 public class Puha_borond extends Objektum {
-    @Override
-    public void szomszed_frissites() {
+    private boolean Lekotott;
 
+    public void setLekotott(boolean lekotott) {
+        Lekotott = lekotott;
+    }
+
+    public boolean isLekotott() {
+        return Lekotott;
     }
 }
