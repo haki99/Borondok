@@ -73,8 +73,39 @@ public class Rakter {
     }
 
     public void addKemenyborond(){
-        rakter.get(1).set(3, new Kemeny_borond());
-        rakter.get(1).get(3).szomszed_frissites(rakter.get(0).get(3), rakter.get(1).get(4), rakter.get(2).get(3), rakter.get(1).get(2));
+        if(rakter.get(1).get(3) == null) {
+            rakter.get(1).set(3, new Kemeny_borond());
+            rakter.get(1).get(3).szomszed_frissites(rakter.get(0).get(3),
+                    rakter.get(1).get(4),
+                    rakter.get(2).get(3),
+                    rakter.get(1).get(2)
+            );
+            if(rakter.get(1).get(2) != null){
+                rakter.get(1).get(2).szomszed_frissites(
+                        rakter.get(0).get(2),
+                        rakter.get(1).get(3),
+                        rakter.get(2).get(2),
+                        rakter.get(1).get(1)
+                );
+            }
+            if(rakter.get(1).get(4) != null){
+                rakter.get(1).get(4).szomszed_frissites(
+                        rakter.get(0).get(4),
+                        rakter.get(1).get(5),
+                        rakter.get(2).get(4),
+                        rakter.get(1).get(3)
+                );
+            }
+            if(rakter.get(2).get(3) != null){
+                rakter.get(2).get(3).szomszed_frissites(
+                        rakter.get(1).get(3),
+                        rakter.get(2).get(4),
+                        rakter.get(3).get(3),
+                        rakter.get(2).get(2)
+                );
+            }
+        }
+        else System.out.println("Foglalt a kezdohely!");
     }
 
     //csak lefele mozgás
@@ -131,6 +162,7 @@ public class Rakter {
 
     //jobbra mozgás és tolás
     public boolean MoveRight(int x) {
+        //ha csak szabadon mozog
         if(munkas.get(0).getSzomszed(1) == null){
             rakter.get(munkas.get(0).getPosy()).set(munkas.get(0).getPosx(), null);
             rakter.get(munkas.get(0).getPosy()).set(munkas.get(0).getPosx() + 1, munkas.get(0));
@@ -154,22 +186,36 @@ public class Rakter {
             );
             int nextposy = munkas.get(0).getPosy();
             int nextposx = munkas.get(0).getPosx() + 1;
+
+            //utolsó megkeresése
             while(last_obj.getSzomszed(1) != null){
                 last_obj = rakter.get(nextposy).get(nextposx + 1);
-                if (last_obj.getClass() == Fal.class) return false;
                 last_obj.setPos(nextposx + 1, nextposy);
-                nextposx = last_obj.getPosx() + 1;
+
+                if (last_obj.getClass() == Fal.class) {
+                    if (rakter.get(nextposy).get(nextposx).getClass() != Puha_borond.class) return false;
+                    else if (rakter.get(nextposy).get(nextposx).getClass() == Puha_borond.class) {
+                        rakter.get(rakter.get(nextposy).get(nextposx).getPosy()).set(rakter.get(nextposy).get(nextposx).getPosx(), null);
+                        last_obj = rakter.get(nextposy).get(nextposx - 1);
+                        last_obj.setPos(nextposx - 1, nextposy);
+                    }
+                }
+
+                nextposx = last_obj.getPosx();
                 last_obj.szomszed_frissites(
                         rakter.get(last_obj.getPosy() - 1).get(last_obj.getPosx()),
                         rakter.get(last_obj.getPosy()).get(last_obj.getPosx() + 1),
                         rakter.get(last_obj.getPosy() + 1).get(last_obj.getPosx()),
                         rakter.get(last_obj.getPosy()).get(last_obj.getPosx() - 1)
                 );
-                if(last_obj.getSzomszed(1) != null) {
-                    if (last_obj.getSzomszed(1).getClass() == Fal.class) return false;
+
+                if(last_obj.getSzomszed(1) != null && last_obj.getClass() != Puha_borond.class) {
+                    System.out.println("eh");
+                    return false;
                 }
             }
 
+            //munkás utániak mozgatása
             while(last_obj.getClass() != Munkas.class) {
                 rakter.get(last_obj.getPosy()).set(last_obj.getPosx() + 1, last_obj);
                 last_obj = last_obj.getSzomszed(3);
@@ -181,6 +227,8 @@ public class Rakter {
                         rakter.get(last_obj.getPosy()).get(last_obj.getPosx() - 1)
                 );
             }
+
+            //munkás mozggatása
             rakter.get(munkas.get(0).getPosy()).set(munkas.get(0).getPosx(), null);
             rakter.get(munkas.get(0).getPosy()).set(munkas.get(0).getPosx() + 1, munkas.get(0));
             munkas.get(0).setPos(munkas.get(0).getPosx() + 1, munkas.get(0).getPosy());
