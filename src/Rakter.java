@@ -177,6 +177,7 @@ public class Rakter {
         }
         else{
             Objektum last_obj = munkas.get(0).getSzomszed(1);
+            if(last_obj.isRogzitett()) return false;
             last_obj.setPos(munkas.get(0).getPosx() + 1, munkas.get(0).getPosy());
             last_obj.szomszed_frissites(
                 rakter.get(last_obj.getPosy() - 1).get(last_obj.getPosx()),
@@ -190,6 +191,9 @@ public class Rakter {
             //utolsó megkeresése
             while(last_obj.getSzomszed(1) != null){
                 last_obj = rakter.get(nextposy).get(nextposx + 1);
+
+                if(last_obj.isRogzitett()) return false;
+
                 last_obj.setPos(nextposx + 1, nextposy);
 
                 if (last_obj.getClass() == Fal.class) {
@@ -243,6 +247,121 @@ public class Rakter {
         return true;
     }
 
+    public boolean pull(int x, String irany){
+        switch (irany){
+            case("fel"):{
+                break;
+            }
+            case("jobbra"):{
+                break;
+            }
+            case("le"):{
+                break;
+            }
+            case("balra"):{
+                if(munkas.get(x).getSzomszed(3) == null && munkas.get(x).getSzomszed(1) != null && !munkas.get(x).getSzomszed(1).isRogzitett()){
+                    if(munkas.get(x).getSzomszed(1).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(1).getClass() == Kemeny_borond.class){
+                        rakter.get(munkas.get(x).getPosy()).set(munkas.get(x).getPosx(), null);
+                        rakter.get(munkas.get(x).getPosy()).set(munkas.get(x).getPosx() - 1, munkas.get(0));
+                        munkas.get(x).setPos(munkas.get(x).getPosx() - 1, munkas.get(x).getPosy());
+
+                        Objektum obj = rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx() + 2);
+                        rakter.get(munkas.get(x).getPosy()).set(munkas.get(x).getPosx() + 1, obj);
+                        rakter.get(munkas.get(x).getPosy()).set(munkas.get(x).getPosx() + 2, null);
+                        rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx() + 1).szomszed_frissites(
+                                rakter.get(munkas.get(x).getPosy() - 1).get(munkas.get(x).getPosx() + 1),
+                                rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx() + 2),
+                                rakter.get(munkas.get(x).getPosy() + 1).get(munkas.get(x).getPosx() + 1),
+                                rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx())
+                        );
+                        munkas.get(x).szomszed_frissites(
+                                rakter.get(munkas.get(x).getPosy() - 1).get(munkas.get(x).getPosx()),
+                                rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx() + 1),
+                                rakter.get(munkas.get(x).getPosy() + 1).get(munkas.get(x).getPosx()),
+                                rakter.get(munkas.get(x).getPosy()).get(munkas.get(x).getPosx() - 1)
+                        );
+                    }
+                    else return false;
+                }
+                else return false;
+                break;
+            }
+        }
+        return true;
+    }
+
+    public boolean Lock(int x, String irany){
+        switch(irany){
+            case("fel"):{
+                if(munkas.get(x).getSzomszed(0).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(0).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(0).setRogzitett(true);
+                }
+                else return false;
+                break;
+            }
+            case("jobbra"):{
+                if (munkas.get(x).getSzomszed(1) != null) {
+                    if (munkas.get(x).getSzomszed(1).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(1).getClass() == Kemeny_borond.class) {
+                        munkas.get(x).getSzomszed(1).setRogzitett(true);
+                    }
+                }
+                else return false;
+                break;
+            }
+            case("le"):{
+                if(munkas.get(x).getSzomszed(2).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(2).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(2).setRogzitett(true);
+                }
+                else return false;
+                break;
+            }
+            case("balra"):{
+                if(munkas.get(x).getSzomszed(3).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(3).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(3).setRogzitett(true);
+                }
+                else return false;
+                break;
+            }
+        }
+        return true;
+    }
+
+    public boolean Unlock(int x, String irany){
+        switch(irany){
+            case("fel"):{
+                if(munkas.get(x).getSzomszed(0).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(0).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(0).setRogzitett(false);
+                }
+                else return false;
+                break;
+            }
+            case("jobbra"):{
+                if (munkas.get(x).getSzomszed(1) != null) {
+                    if (munkas.get(x).getSzomszed(1).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(1).getClass() == Kemeny_borond.class) {
+                        munkas.get(x).getSzomszed(1).setRogzitett(false);
+                    }
+                }
+                else return false;
+                break;
+            }
+            case("le"):{
+                if(munkas.get(x).getSzomszed(2).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(2).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(2).setRogzitett(false);
+                }
+                else return false;
+                break;
+            }
+            case("balra"):{
+                if(munkas.get(x).getSzomszed(3).getClass() == Puha_borond.class || munkas.get(x).getSzomszed(3).getClass() == Kemeny_borond.class) {
+                    munkas.get(x).getSzomszed(3).setRogzitett(false);
+                }
+                else return false;
+                break;
+            }
+        }
+        return true;
+    }
+
     public void szomszedok_frissites() {
         for (int i = 1; i < 6; i++) {
             for (int j = 1; j < 6; j++) {
@@ -264,10 +383,11 @@ public class Rakter {
             for (int j = 0; j < 7; j++) {
                 System.out.print("[");
                 if(rakter.get(i).get(j) != null){
-                    if(rakter.get(i).get(j).getClass() == Fal.class) System.out.print("x");
-                    if(rakter.get(i).get(j).getClass() == Puha_borond.class) System.out.print("P");
-                    if(rakter.get(i).get(j).getClass() == Kemeny_borond.class) System.out.print("K");
-                    if(rakter.get(i).get(j).getClass() == Munkas.class) System.out.print(munkas.indexOf(rakter.get(i).get(j)));
+                    if(rakter.get(i).get(j).isRogzitett() == true) System.out.print("+");
+                    else if(rakter.get(i).get(j).getClass() == Fal.class) System.out.print("x");
+                    else if(rakter.get(i).get(j).getClass() == Puha_borond.class) System.out.print("P");
+                    else if(rakter.get(i).get(j).getClass() == Kemeny_borond.class) System.out.print("K");
+                    else if(rakter.get(i).get(j).getClass() == Munkas.class) System.out.print(munkas.indexOf(rakter.get(i).get(j)));
                 }
                 else System.out.print(" ");
                 System.out.print("]");

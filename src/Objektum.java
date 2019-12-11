@@ -21,6 +21,10 @@ public abstract class Objektum {
         Rogzitett = b;
     }
 
+    public boolean isRogzitett(){
+        return  Rogzitett;
+    }
+
     public void szomszed_frissites(Objektum fent, Objektum jobb, Objektum alul, Objektum bal){
         szomszedok[0] = fent;
         szomszedok[1] = jobb;
